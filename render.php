@@ -31,7 +31,7 @@ $metas = $dom->getElementsByTagName('meta');
 $fb = [];
 
 foreach ($metas as $meta) {
-    if ($meta->hasAttribute('property') && $meta->hasAttribute('content')) {
+    if ($meta->hasAttribute('property') && str_starts_with($meta->getAttribute('property'), 'og:') && $meta->hasAttribute('content')) {
         $fb[$meta->getAttribute('property')] = $meta->getAttribute('content');
     }
 }
