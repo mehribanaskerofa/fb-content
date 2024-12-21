@@ -1,32 +1,14 @@
 <?php
+require_once './classes/Validation.php';
+require_once './classes/Url.php';
+require_once './classes/Convert.php';
 
-if (empty($_POST["url"]) || !isset($_POST["url"])) {
-    header("Location: index.html");
-    exit;
-}
+$redirectUrl='index.html';
+$url = (new Validation())->validate($_POST["url"],$redirectUrl);
 
-$url = $_POST["url"];
+$html=(new Url())->getData($url);
 
-$ch = curl_init();
-
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-$html = curl_exec($ch);
-$error = curl_error($ch);
-curl_close($ch);
-
-
-if (empty($html)) {
-    echo $error;
-    exit;
-}
-
-$dom = new DOMDocument();
-@$dom->loadHTML($html);
-
-$metas = $dom->getElementsByTagName('meta');
+$metas=(new Convert())->getMeta($html);
 
 $fb = [];
 
